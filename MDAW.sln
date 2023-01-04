@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.3.32819.101
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDAW", "MDAW\MDAW.csproj", "{924A6ED4-00E7-4319-8426-6C3B9285A59C}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC75516B-C833-4680-A4F4-39B6EDA85942} = {AC75516B-C833-4680-A4F4-39B6EDA85942}
+		{D15EA10B-E439-4D1B-ACD4-AF614122B874} = {D15EA10B-E439-4D1B-ACD4-AF614122B874}
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DemoSong", "DemoSong\DemoSong.csproj", "{D15EA10B-E439-4D1B-ACD4-AF614122B874}"
+	ProjectSection(ProjectDependencies) = postProject
+		{AC75516B-C833-4680-A4F4-39B6EDA85942} = {AC75516B-C833-4680-A4F4-39B6EDA85942}
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{9409B3AF-703D-4CD7-B9B4-8D7ACCA0278E}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+	EndProjectSection
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MDAWLib", "MDAWLib\MDAWLib.csproj", "{AC75516B-C833-4680-A4F4-39B6EDA85942}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{924A6ED4-00E7-4319-8426-6C3B9285A59C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{924A6ED4-00E7-4319-8426-6C3B9285A59C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{924A6ED4-00E7-4319-8426-6C3B9285A59C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{924A6ED4-00E7-4319-8426-6C3B9285A59C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D15EA10B-E439-4D1B-ACD4-AF614122B874}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D15EA10B-E439-4D1B-ACD4-AF614122B874}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D15EA10B-E439-4D1B-ACD4-AF614122B874}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D15EA10B-E439-4D1B-ACD4-AF614122B874}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC75516B-C833-4680-A4F4-39B6EDA85942}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC75516B-C833-4680-A4F4-39B6EDA85942}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC75516B-C833-4680-A4F4-39B6EDA85942}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC75516B-C833-4680-A4F4-39B6EDA85942}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D92F659E-9D00-4830-A773-5B6A53E8030B}
+	EndGlobalSection
+EndGlobal

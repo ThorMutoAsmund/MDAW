@@ -1,0 +1,34 @@
+﻿<Window x:Class="MDAW.OpenProjectWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:MDAW"
+        mc:Ignorable="d"
+        Title="OpenProjectWindow" Height="135" Width="413"
+        MinHeight="216" MinWidth="446">
+    <Grid>
+        <DockPanel LastChildFill="False" Margin="8">
+            <StackPanel Orientation="Vertical"  DockPanel.Dock="Top">
+                <Grid Margin="0,4,0,0">
+                    <Label Content="Project" HorizontalAlignment="Left" Margin="60,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="projectPathTextBox" HorizontalAlignment="Left" Margin="115,4,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="298" IsEnabled="False"/>
+                </Grid>
+                <Grid Margin="0,4,0,0">
+                    <Label Content="Target" HorizontalAlignment="Left" Margin="64,0,0,0" VerticalAlignment="Top"/>
+                    <TextBox x:Name="projectTargetTextBox" HorizontalAlignment="Left" Margin="115,4,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="298" IsEnabled="False"/>
+                </Grid>
+                <Grid Margin="0,4,0,0">
+                    <Label Content="Configuration" HorizontalAlignment="Left" Margin="26,0,0,0" VerticalAlignment="Top"/>
+                    <ComboBox x:Name="configurationComboBox" HorizontalAlignment="Left" Margin="115,4,0,0" VerticalAlignment="Top" Width="216" >
+                    </ComboBox>
+                </Grid>
+            </StackPanel>
+            <StackPanel Orientation="Horizontal" HorizontalAlignment="Right" DockPanel.Dock="Bottom" Width="auto">
+                <Button x:Name="openButton" Content="Open" HorizontalAlignment="Left" Margin="4,0,0,0" Width="62" IsDefault="True" Click="openButton_Click"/>
+                <Button x:Name="cancelButton" Content="Cancel" HorizontalAlignment="Left" Margin="4,0,0,0" Width="62" IsCancel="True"/>
+            </StackPanel>
+        </DockPanel>
+
+    </Grid>
+</Window>
