@@ -19,6 +19,7 @@
         <KeyBinding Key="F5" Modifiers="Control" Command="local:CustomCommands.PlayFromStart"/>
         <KeyBinding Key="Esc" Command="local:CustomCommands.Stop"/>
         <KeyBinding Key="F1" Command="local:CustomCommands.About"/>
+        <KeyBinding Key="D1" Modifiers="Alt" Command="local:CustomCommands.RecentFile1"/>
     </Window.InputBindings>
     
     <DockPanel>
@@ -31,7 +32,10 @@
                 <Separator />
                 <MenuItem Name="startEditorMenu" Header="_Start Editor" InputGestureText="Ctrl+E" Command="local:CustomCommands.StartEditor" />
                 <Separator />
-                <MenuItem Name="settingsMenu" Header="_Settings" Command="local:CustomCommands.Settings"  />
+                <MenuItem Name="settingsMenu" Header="_Settings" Command="local:CustomCommands.Settings" />
+                <Separator />
+                <MenuItem Name="recentFilesMenu" Header="_Recent files" />
+                <MenuItem Name="clearRecentFilesMenu" Header="_Clear Recent files" Command="local:CustomCommands.ClearRecentFiles" />
                 <Separator />
                 <MenuItem Name="exitMenu" Header="_Exit" InputGestureText="Alt+F4" Command="local:CustomCommands.ExitApplication" />
             </MenuItem>

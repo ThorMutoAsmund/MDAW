@@ -1,4 +1,5 @@
-﻿using MDAWLib1;
+﻿using MDAW.Properties;
+using MDAWLib1;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -37,18 +38,26 @@ namespace MDAW
 
                 if (Dialogs.SelectProject(out string selectedProjectPath))
                 {
-                    if (File.Exists(selectedProjectPath) && Project.TryLoadFromFile(selectedProjectPath, out var newProject))
-                    {
-                        Env.Project = newProject;
-                        Env.HasChanges = false;
-
-                        if (Env.Project != null)
-                        {
-                            Env.Project.ReloadProjectDLL();
-                        }
-                    }
+                    OpenProject(selectedProjectPath);
                 }
             }
+        }
+
+        public static void OpenProject(string projectPath)
+        {
+            if (File.Exists(projectPath) && Project.TryLoadFromFile(projectPath, out var newProject))
+            {
+                Env.Project = newProject;
+                Env.HasChanges = false;
+
+                if (newProject != null)
+                {
+                    newProject.ReloadProjectDLL();
+                    newProject.WatchForChanges();
+                    Env.AddRecentFile(projectPath);
+                }
+            }
+
         }
 
         public static void CloseProject()

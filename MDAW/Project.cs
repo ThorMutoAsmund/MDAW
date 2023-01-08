@@ -7,6 +7,7 @@ using System.Linq;
 using System.Reflection;
 using System.Runtime.Loader;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Xml.Linq;
@@ -26,6 +27,8 @@ namespace MDAW
 
         public Assembly? Assembly { get; private set; }
         public Song? Song { get; private set; }
+
+        private FileSystemWatcher? dllWatcher;
 
         private Project(string projectPath, string target, ProjectConfiguration configuration)
         {
@@ -75,6 +78,49 @@ namespace MDAW
             }
 
             return false;
+        }
+
+        public void WatchForChanges()
+        {
+            if (this.dllWatcher == null)
+            {
+                var context = SynchronizationContext.Current;
+
+                if (context != null)
+                {
+                    this.dllWatcher = new FileSystemWatcher()
+                    {
+                        Path = Path.GetDirectoryName(this.DLLPath) ?? string.Empty,
+                        NotifyFilter = NotifyFilters.FileName | NotifyFilters.LastWrite,
+                        Filter = this.DLLName,
+                    };
+                    this.dllWatcher.Created += (source, e) => context.Post(val => OnReceiveFiles(), source);
+                    this.dllWatcher.EnableRaisingEvents = true;
+                }
+            }
+        }
+
+        private void OnReceiveFiles()
+        {
+            int tries = 10;
+            while (tries-- > 0)
+            {
+                try
+                {
+                    using (StreamReader stream = new StreamReader(this.DLLPath))
+                    {
+                        break;
+                    }
+                }
+                catch
+                {
+                    Thread.Sleep(200);
+                }
+            }
+            if (tries > 0)
+            {
+                ReloadProjectDLL();
+            }
         }
 
         public void ReloadProjectDLL()

@@ -12,19 +12,22 @@ namespace MDAW
     {
         public static WaveOutEvent WaveOut { get; private set; } = new WaveOutEvent();
 
-        private static void EnsureStopped()
+        private static bool EnsureStopped()
         {
             if (WaveOut.PlaybackState != PlaybackState.Stopped)
             {
                 WaveOut.Stop();
-            //    if (fileReader != null)
-            //    {
-            //        fileReader.Dispose();
-            //        fileReader = null;
-            //    }
-            //    //mp3Reader.Dispose();
-            //    //FileWaveOut.Dispose();
+                //    if (fileReader != null)
+                //    {
+                //        fileReader.Dispose();
+                //        fileReader = null;
+                //    }
+                //    //mp3Reader.Dispose();
+                //    //FileWaveOut.Dispose();
+                return true;
             }
+
+            return false;
         }
 
         private static void InternalPlay()
@@ -37,9 +40,12 @@ namespace MDAW
 
         public static void Stop()
         {
-            Env.OnAddMessage($"Stopping");
+            
 
-            EnsureStopped();
+            if (EnsureStopped())
+            {
+                Env.OnAddMessage($"Stopping");
+            }
         }
 
         public static void Play()

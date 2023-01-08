@@ -1,4 +1,5 @@
-﻿using MDAWLib1;
+﻿using MDAW.Properties;
+using MDAWLib1;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -16,6 +17,7 @@ namespace MDAW
         public static event Action<string>? AddMessage;
         public static event Action? HasChangesChanged;
         public static event Action? ProjectChanged;
+        public static event Action? RecentFilesChanged;
 
         public static string ApplicationName = "MDAW";
         public static bool IsDebug => true;
@@ -47,6 +49,39 @@ namespace MDAW
                     project = value;
                     ProjectChanged?.Invoke();
                 }
+            }
+        }
+
+        public static IEnumerable<string> RecentFiles
+        {
+            get => Settings.Default.RecentFiles?.Cast<string>().ToList() ?? new List<string>();
+        }
+
+        public static void AddRecentFile(string recentFile)
+        {
+            if (Settings.Default.RecentFiles == null)
+            {
+                Settings.Default.RecentFiles = new System.Collections.Specialized.StringCollection();
+            }
+            Settings.Default.RecentFiles.Add(recentFile);
+            Settings.Default.Save();
+
+            RecentFilesChanged?.Invoke();
+        }
+
+        public static void ClearRecentFiles()
+        {
+            Settings.Default.RecentFiles = null;
+            Settings.Default.Save();
+
+            RecentFilesChanged?.Invoke();
+        }
+
+        public static void OpenRecentFile1()
+        {
+            if (Env.RecentFiles != null && Env.RecentFiles?.Count() > 0)
+            {
+                FileCommands.OpenProject(Env.RecentFiles.ElementAt(0));
             }
         }
 

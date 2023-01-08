@@ -41,6 +41,7 @@ namespace MDAW
             Env.AddMessage += AddMessage;
             Env.ProjectChanged += SetTitle;
             Env.HasChangesChanged += SetTitle;
+            Env.RecentFilesChanged += RecentFilesChanged;
         }
 
         private void SetTitle()
@@ -75,6 +76,38 @@ namespace MDAW
         {
             this.stayOnTopMenu.IsChecked = Settings.Default.StayOnTop;
             this.Topmost = Settings.Default.StayOnTop;
+
+            RecentFilesChanged();
+        }
+
+        private void RecentFilesChanged()
+        {
+            this.recentFilesMenu.IsEnabled = Settings.Default.RecentFiles != null && Settings.Default.RecentFiles.Count > 0;
+            this.recentFilesMenu.Items.Clear();
+
+            if (Settings.Default.RecentFiles != null)
+            {
+                foreach (var recentFile in Env.RecentFiles)
+                {
+                    var subMenu = new MenuItem()
+                    {
+                        Header = recentFile
+                    };
+                    subMenu.Click += (object sender, RoutedEventArgs e) =>
+                    {
+                        var file = (sender as MenuItem)?.Header as string;
+                        FileCommands.OpenProject(file);
+                    };
+
+                    this.recentFilesMenu.Items.Add(subMenu);
+                }
+            }
+        }
+
+        private void SubMenu_Click(object sender, RoutedEventArgs e)
+        {
+            var file = (sender as MenuItem)?.Header;
+            Debug.WriteLine(file);
         }
         #endregion
 

@@ -34,7 +34,7 @@ namespace DemoSong
 
         private int ramp = 0;
         
-        public RisingProvider(double startFrequency = 440.0, double endFrequency = 880.0, double speed = 50000.0)
+        public RisingProvider(double startFrequency = 440.0, double endFrequency = 550.0, double speed = 14000.0)
         {
             this.StartFrequency = startFrequency;
             this.EndFrequency = endFrequency;
