@@ -48,7 +48,7 @@ namespace MDAW
 
             if (project.Song?.SampleProvider is IHasInputs hasInputs)
             {
-                foreach (var track in hasInputs.IN)
+                foreach (var track in hasInputs.Inputs)
                 {
                     var trackControl = new TrackControl()
                     {

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class Inputs : List<Input>
+    public class Parts : List<Part>
     {
     }
 }

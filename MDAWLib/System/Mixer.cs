@@ -8,14 +8,20 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class Mixer : BaseProvider, IHasInputs
+    public class Mixer : MixerBase
     {
-        public Output OUT { get; private set; } = new Output();
-        public Inputs IN { get; private set; } = new Inputs();
+        public SampleProviders Tracks { get; private set; } = new SampleProviders();
+        public override IEnumerable<ISampleProvider> Inputs => this.Tracks;
+
+    }
+
+    public abstract class MixerBase : BaseProvider, IHasInputs
+    {
+        public abstract IEnumerable<ISampleProvider> Inputs { get; }
 
         private float[]? mixBuffer;
 
-        public Mixer()
+        public MixerBase()
         {
         }
 
@@ -30,13 +36,17 @@ namespace MDAWLib1
 
             this.mixBuffer = BufferHelpers.Ensure(this.mixBuffer, count);
 
-            int index = this.IN.Count;
+            var inputArray = this.Inputs.ToArray();
+            int index = inputArray.Length;
 
             while (index > 0)
             {
                 index--;
 
-                var source = this.IN[index];
+                var source = inputArray[index];
+
+                // Here: Tell source what the current song position is? Relative position?
+
                 int samplesRead = source.Read(this.mixBuffer, 0, count);
                 if (samplesRead == 0)
                 {
@@ -48,26 +58,16 @@ namespace MDAWLib1
                 {
                     if (n >= outputCount)
                     {
-                        buffer[outIndex++] = this.mixBuffer[n] * source.Gain;
+                        buffer[outIndex++] = this.mixBuffer[n];// * source.Gain;
                     }
                     else
                     {
-                        buffer[outIndex++] += this.mixBuffer[n] * source.Gain;
+                        buffer[outIndex++] += this.mixBuffer[n];// * source.Gain;
                     }
                 }
                 outputCount = Math.Max(samplesRead, outputCount);
             }
 
-            // optionally ensure we return a full buffer
-            //if (outputCount < count)
-            //{
-            //    int outputIndex = offset + outputCount;
-            //    while (outputIndex < offset + count)
-            //    {
-            //        buffer[outputIndex++] = 0;
-            //    }
-            //    outputCount = count;
-            //}
             return outputCount;
         }
     }

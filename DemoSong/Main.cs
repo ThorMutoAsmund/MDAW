@@ -15,15 +15,15 @@ namespace DemoSong
         public MyMixer() :
             base()
         {
-            var sine = new RisingProvider();
+            var sine1 = new RisingProvider(440.0, 880.0, 100000.0);
+            var sine2 = new RisingProvider(660.0, 2*660.0, 100000.0);
             //var sine = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
             //var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 1220.0);
 
-            sine.ConnectTo(this.IN);
-            //sine2.ConnectTo(this.IN);
-
-            // Set render length
-            // Set song title etc.
+            Track track = new();
+            track.ConnectTo(this.Tracks);
+            sine1.ConnectTo(track.Parts);
+            sine2.ConnectTo(track.Parts, (int)(1.0 * this.SampleRate));
         }
     }
     public class RisingProvider : BaseProvider

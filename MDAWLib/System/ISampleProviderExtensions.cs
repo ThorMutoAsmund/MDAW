@@ -9,9 +9,13 @@ namespace MDAWLib1
 {
     public static class ISampleProviderExtensions
     {
-        public static void ConnectTo(this ISampleProvider source, Inputs destination, int startAt = 0, float gain = 1f)
+        public static void ConnectTo(this ISampleProvider source, Parts destination, int startAt = 0, float gain = 1f)
         {
-            destination.Add(new Input(source, startAt: startAt, gain: gain));
+            destination.Add(new Part(source, startAt: startAt, gain: gain));
+        }
+        public static void ConnectTo(this ISampleProvider source, SampleProviders destination)
+        {
+            destination.Add(source);
         }
     }
 }

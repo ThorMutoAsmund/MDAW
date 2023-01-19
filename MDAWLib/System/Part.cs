@@ -7,13 +7,14 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class Input
+    public class Part : ISampleProvider
     {
+        public WaveFormat WaveFormat => this.SampleProvider.WaveFormat;
         public ISampleProvider SampleProvider { get; set; }
         public int StartAt { get; set; }
         public float Gain { get; set; }
 
-        public Input(ISampleProvider sampleProvider, int startAt = 0, float gain = 1f)
+        public Part(ISampleProvider sampleProvider, int startAt = 0, float gain = 1f)
         {
             this.SampleProvider = sampleProvider;
             this.StartAt = startAt;
