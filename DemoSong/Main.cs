@@ -35,7 +35,7 @@ namespace DemoSong
 
         private int ramp = 0;
         
-        public RisingProvider(double startFrequency = 440.0, double endFrequency = 550.0, double speed = 140000.0)
+        public RisingProvider(double startFrequency = 440.0, double endFrequency = 880.0, double speed = 100000.0)
         {
             this.StartFrequency = startFrequency;
             this.EndFrequency = endFrequency;
@@ -51,24 +51,30 @@ namespace DemoSong
 
             Debug.WriteLine($"{offset}");
 
-            for (int i = 0; i < count; ++i)
+            int i = 0;
+            double freq = 0.0;
+            while (i < count / this.Channels)
             {
-                var freq = this.StartFrequency + (this.EndFrequency - this.StartFrequency) * (this.ramp + i) / this.Speed;
+                freq = this.StartFrequency + (this.EndFrequency - this.StartFrequency) * (this.ramp + i) / this.Speed;
+                if (freq > this.EndFrequency)
+                {
+                    break;
+                }
+
                 var f = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * freq;
-                var ff = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * this.StartFrequency;
+                //var ff = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * this.StartFrequency;
 
-                if (i % 2 == LEFT)
+                buffer[offset + i * this.Channels] = (float)(Math.Sin((i + ramp) * f) * 2f - 1f);
+                if (this.Channels > 1)
                 {
-                    buffer[offset + i] = (float)(Math.Sin((i + ramp) * f) * 2f - 1f);
+                    buffer[offset + i * this.Channels + 1] = 0f;// (float)(Math.Sin((i + ramp) * ff) * 2f - 1f);
                 }
-                else
-                {
-                    buffer[offset + i] = 0f;// (float)(Math.Sin((i + ramp) * ff) * 2f - 1f);
-                }
+
+                i++;
             }
-            ramp += count;
+            ramp += i;
 
-            return count;
+            return i * 2;
         }
     }
 }

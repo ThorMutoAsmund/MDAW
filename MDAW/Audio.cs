@@ -10,7 +10,7 @@ namespace MDAW
 {
     public static class Audio
     {
-        private static WaveOutEvent waveOut;
+        private static WaveOutEvent? waveOut;
         public static WaveOutEvent WaveOut
         {
             get
@@ -24,13 +24,22 @@ namespace MDAW
             }
         }
 
+        private static bool resetWhenStopping = false;
+
         private static void WaveOut_PlaybackStopped(object? sender, StoppedEventArgs e)
         {
             Env.OnAddMessage($"Playback stopped");
+
+            if (resetWhenStopping && WaveOut.PlaybackState == PlaybackState.Stopped)
+            {
+                PlaybackContext.Current.ResetPosition();
+            }
         }
 
         private static bool EnsureStopped()
         {
+            resetWhenStopping = false;
+
             if (WaveOut.PlaybackState != PlaybackState.Stopped)
             {
                 WaveOut.Stop();
@@ -51,6 +60,8 @@ namespace MDAW
         {
             EnsureStopped();
 
+            resetWhenStopping = true;
+
             WaveOut.Init(PlaybackContext.Current);
             WaveOut.Play();
         }
@@ -62,15 +73,20 @@ namespace MDAW
 
         public static void Play()
         {
-            Env.OnAddMessage($"Playing");
+            if (WaveOut.PlaybackState == PlaybackState.Stopped)
+            {
+                Env.OnAddMessage($"Playing");
 
-            InternalPlay();
+                InternalPlay();
+            }
         }
 
         public static void PlayFromStart()
         {
             Env.OnAddMessage($"Playing from start");
-
+                        
+            EnsureStopped(); 
+            
             PlaybackContext.Current.ResetPosition();
 
             InternalPlay();

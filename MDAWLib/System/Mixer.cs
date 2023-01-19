@@ -26,19 +26,27 @@ namespace MDAWLib1
                 return 0;
             }
 
-            int outputSamples = 0;
+            int outputCount = 0;
+
             this.mixBuffer = BufferHelpers.Ensure(this.mixBuffer, count);
-            //lock (this.providers)
-            //{
-            int index = this.IN.Count - 1;
-            while (index >= 0)
+
+            int index = this.IN.Count;
+
+            while (index > 0)
             {
+                index--;
+
                 var source = this.IN[index];
                 int samplesRead = source.Read(this.mixBuffer, 0, count);
+                if (samplesRead == 0)
+                {
+                    continue;
+                }
+
                 int outIndex = offset;
                 for (int n = 0; n < samplesRead; n++)
                 {
-                    if (n >= outputSamples)
+                    if (n >= outputCount)
                     {
                         buffer[outIndex++] = this.mixBuffer[n] * source.Gain;
                     }
@@ -47,26 +55,20 @@ namespace MDAWLib1
                         buffer[outIndex++] += this.mixBuffer[n] * source.Gain;
                     }
                 }
-                outputSamples = Math.Max(samplesRead, outputSamples);
-                //if (samplesRead == 0)
-                //{
-                //    this.providers.RemoveAt(index);
-                //}
-                index--;
+                outputCount = Math.Max(samplesRead, outputCount);
             }
-            //}
 
             // optionally ensure we return a full buffer
-            if (outputSamples < count)
-            {
-                int outputIndex = offset + outputSamples;
-                while (outputIndex < offset + count)
-                {
-                    buffer[outputIndex++] = 0;
-                }
-                outputSamples = count;
-            }
-            return outputSamples;
+            //if (outputCount < count)
+            //{
+            //    int outputIndex = offset + outputCount;
+            //    while (outputIndex < offset + count)
+            //    {
+            //        buffer[outputIndex++] = 0;
+            //    }
+            //    outputCount = count;
+            //}
+            return outputCount;
         }
     }
 }

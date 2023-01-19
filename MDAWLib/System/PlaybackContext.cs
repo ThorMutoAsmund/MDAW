@@ -57,6 +57,7 @@ namespace MDAWLib1
             }
         }
 
+        private float[]? buffer;
         private void Render(double seconds = 10.0)
         {
             if (this.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
@@ -64,33 +65,32 @@ namespace MDAWLib1
                 throw new InvalidOperationException("Only 16, 24 or 32 bit PCM or IEEE float audio data supported");
             }
 
-            var buffer = new float[14400];
+            this.buffer = BufferHelpers.Ensure(this.buffer, 14400);
 
             this.outStream = new MemoryStream();
-            
-            var writer = new BinaryWriter(this.outStream, Encoding.UTF8);
+
+            var writer = new BinaryWriter(this.outStream);
 
             int remaining = (int)(this.SampleRate * seconds);
 
             while (remaining > 0)
             {
                 var count = Math.Min(14400, remaining);
-                var actual = this.SampleProvider.Read(buffer, 0, count);
+                var actual = this.SampleProvider.Read(this.buffer, 0, count);
 
-                remaining -= count;
-
-                for (int i = 0; i < count; i++)
+                if (actual == 0)
                 {
-                    writer.Write(buffer[i]);
+                    break;
+                }
+
+                remaining -= actual;
+
+                for (int i = 0; i < actual; i++)
+                {
+                    writer.Write(this.buffer[i]);
                     this.dataChunkSize += 4L;
                 }
             }
-
-            this.outStream.Seek(0, SeekOrigin.Begin);
-
-            byte[] test = new byte[32];
-
-            this.outStream.Read(test, 0, 32);
         }
 
         //public void WriteSample(float sample)
