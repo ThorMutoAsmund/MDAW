@@ -43,9 +43,9 @@ namespace MDAW
             }
         }
 
-        public static void OpenProject(string projectPath)
+        public static void OpenProject(string? projectPath)
         {
-            if (File.Exists(projectPath) && Project.TryLoadFromFile(projectPath, out var newProject))
+            if (projectPath != null && File.Exists(projectPath) && Project.TryLoadFromFile(projectPath, out var newProject))
             {
                 Env.Project = newProject;
                 Env.HasChanges = false;
@@ -57,7 +57,6 @@ namespace MDAW
                     Env.AddRecentFile(projectPath);
                 }
             }
-
         }
 
         public static void CloseProject()

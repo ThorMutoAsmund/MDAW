@@ -39,9 +39,15 @@ namespace MDAW
             }
 
             Env.AddMessage += AddMessage;
-            Env.ProjectChanged += SetTitle;
+            Env.ProjectChanged += ProjectChanged;
             Env.HasChangesChanged += SetTitle;
             Env.RecentFilesChanged += RecentFilesChanged;
+        }
+
+        private void ProjectChanged()
+        {
+            SetTitle();
+            Audio.Stop();
         }
 
         private void SetTitle()

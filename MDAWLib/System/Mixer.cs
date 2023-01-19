@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class Mixer : BaseProvider
+    public class Mixer : BaseProvider, IHasInputs
     {
         public Output OUT { get; private set; } = new Output();
         public Inputs IN { get; private set; } = new Inputs();

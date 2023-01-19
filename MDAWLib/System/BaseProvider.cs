@@ -10,13 +10,15 @@ namespace MDAWLib1
 {
     public abstract class BaseProvider : IProvider
     {
-        public WaveFormat WaveFormat => Context.Song.WaveFormat;
-        public int SampleRate => Context.Song.WaveFormat.SampleRate;
-        public int Channels => Context.Song.WaveFormat.Channels;
+        protected const int LEFT = 0;
+        protected const int RIGHT = 1;
+        public WaveFormat WaveFormat => this.Context.Song.WaveFormat;
+        public int SampleRate => this.Context.Song.WaveFormat.SampleRate;
+        public int Channels => this.Context.Song.WaveFormat.Channels;
         public bool Failed { get; set; }
         public string Failure { get; set; } = String.Empty;
 
-        protected static PlaybackContext Context => PlaybackContext.Current;
+        private PlaybackContext Context => PlaybackContext.Current;
 
         protected void Fail(string failure)
         {

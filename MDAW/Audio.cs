@@ -10,7 +10,24 @@ namespace MDAW
 {
     public static class Audio
     {
-        public static WaveOutEvent WaveOut { get; private set; } = new WaveOutEvent();
+        private static WaveOutEvent waveOut;
+        public static WaveOutEvent WaveOut
+        {
+            get
+            {
+                if (waveOut == null)
+                {
+                    waveOut = new WaveOutEvent();
+                    waveOut.PlaybackStopped += WaveOut_PlaybackStopped;
+    }
+                return waveOut;
+            }
+        }
+
+        private static void WaveOut_PlaybackStopped(object? sender, StoppedEventArgs e)
+        {
+            Env.OnAddMessage($"Playback stopped");
+        }
 
         private static bool EnsureStopped()
         {
@@ -40,12 +57,7 @@ namespace MDAW
 
         public static void Stop()
         {
-            
-
-            if (EnsureStopped())
-            {
-                Env.OnAddMessage($"Stopping");
-            }
+            EnsureStopped();
         }
 
         public static void Play()

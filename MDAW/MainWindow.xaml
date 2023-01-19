@@ -63,6 +63,9 @@
 
         <TabControl Margin="4" DockPanel.Dock="Bottom" >
             <TabItem Header="Messages">
+                <local:TrackVisualizerControl></local:TrackVisualizerControl>
+            </TabItem>
+            <TabItem Header="Messages">
                 <ScrollViewer Name="outputScrollViewer">
                     <TextBlock Name="outputTextBlock" Background="#fff" Padding="10">
                         <TextBlock.ContextMenu>

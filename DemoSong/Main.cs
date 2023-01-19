@@ -7,6 +7,7 @@ namespace DemoSong
     {
         public override IProvider SampleProvider { get; } = new MyMixer();
         public override string Title { get; } = "My Demo Song2";
+        public override double? Duration { get; } = 5.0;
     }
 
 
@@ -34,7 +35,7 @@ namespace DemoSong
 
         private int ramp = 0;
         
-        public RisingProvider(double startFrequency = 440.0, double endFrequency = 550.0, double speed = 14000.0)
+        public RisingProvider(double startFrequency = 440.0, double endFrequency = 550.0, double speed = 140000.0)
         {
             this.StartFrequency = startFrequency;
             this.EndFrequency = endFrequency;
@@ -54,7 +55,16 @@ namespace DemoSong
             {
                 var freq = this.StartFrequency + (this.EndFrequency - this.StartFrequency) * (this.ramp + i) / this.Speed;
                 var f = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * freq;
-                buffer[offset + i] = (float)(Math.Sin((i + ramp) * f) * 2f - 1f);
+                var ff = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * this.StartFrequency;
+
+                if (i % 2 == LEFT)
+                {
+                    buffer[offset + i] = (float)(Math.Sin((i + ramp) * f) * 2f - 1f);
+                }
+                else
+                {
+                    buffer[offset + i] = 0f;// (float)(Math.Sin((i + ramp) * ff) * 2f - 1f);
+                }
             }
             ramp += count;
 

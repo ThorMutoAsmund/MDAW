@@ -18,6 +18,7 @@ namespace MDAW
         public static event Action? HasChangesChanged;
         public static event Action? ProjectChanged;
         public static event Action? RecentFilesChanged;
+        public static event Action? DLLReloaded;
 
         public static string ApplicationName = "MDAW";
         public static bool IsDebug => true;
@@ -63,10 +64,14 @@ namespace MDAW
             {
                 Settings.Default.RecentFiles = new System.Collections.Specialized.StringCollection();
             }
-            Settings.Default.RecentFiles.Add(recentFile);
-            Settings.Default.Save();
 
-            RecentFilesChanged?.Invoke();
+            if (!Settings.Default.RecentFiles.Contains(recentFile))
+            {
+                Settings.Default.RecentFiles.Add(recentFile);
+                Settings.Default.Save();
+
+                RecentFilesChanged?.Invoke();
+            }
         }
 
         public static void ClearRecentFiles()
@@ -96,5 +101,11 @@ namespace MDAW
             AddMessage?.Invoke(message);
         }
 
+        public static void OnDLLReloaded(Song song)
+        {
+            Env.OnAddMessage($"Reloaded '{song.Title}'");
+
+            DLLReloaded?.Invoke();
+        }
     }
 }

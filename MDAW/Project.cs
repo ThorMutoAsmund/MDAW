@@ -144,9 +144,9 @@ namespace MDAW
                                 this.Song = myObject as Song;
                                 if (this.Song != null)
                                 {
-                                    Env.OnAddMessage($"Reloaded '{this.Song.Title}'");
-                                    
                                     PlaybackContext.CreateFromSong(this.Song);
+
+                                    Env.OnDLLReloaded(this.Song);
                                 }
                                 else
                                 {
