@@ -42,7 +42,7 @@ namespace MDAWLib1
         {
             var context = new PlaybackContext(song);
 
-            context.Render(song.Duration ?? 10.0);
+            context.Render(10.0);
             context.ResetPosition();
 
             Current = context;

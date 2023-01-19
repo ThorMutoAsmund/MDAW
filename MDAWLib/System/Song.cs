@@ -33,7 +33,6 @@ namespace MDAWLib1
         }
 
         public virtual string Title { get; } = "untitled";
-        public virtual double? Duration { get; }
 
         private int sampleRate = DefaultSampleReate;
         private WaveFormat? waveFormat;

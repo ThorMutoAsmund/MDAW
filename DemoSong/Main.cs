@@ -7,7 +7,6 @@ namespace DemoSong
     {
         public override IProvider SampleProvider { get; } = new MyMixer();
         public override string Title { get; } = "My Demo Song2";
-        public override double? Duration { get; } = 5.0;
     }
 
 
