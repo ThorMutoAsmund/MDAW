@@ -71,6 +71,8 @@ namespace MDAW
         {
             Env.OnAddMessage($"Playing from start");
 
+            PlaybackContext.Current.ResetPosition();
+
             InternalPlay();
         }
 

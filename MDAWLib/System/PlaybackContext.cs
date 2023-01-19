@@ -22,19 +22,20 @@ namespace MDAWLib1
         private ISampleProvider SampleProvider => this.Song.SampleProvider;
         public WaveFormat WaveFormat => this.Song.WaveFormat;
         public int SampleRate => this.Song.WaveFormat.SampleRate;
-        public int SamplePosition { get; set; }
-
+        public int BytePosition { get; set; }
+        public int SamplePosition => this.BytePosition / this.BytesPerSample;
 
         public long Length => dataChunkSize;
-        
+
+        private int BytesPerSample => this.WaveFormat.BitsPerSample / 8;
+
         private long dataChunkSize;
-        //private readonly byte[] value24 = new byte[3];
         private MemoryStream? outStream;
 
         private PlaybackContext(Song song)
         {
             this.Song = song;
-            this.SamplePosition = 0;
+            this.BytePosition = 0;
         }
 
         public static void CreateFromSong(Song song, double offset = 0d)
@@ -47,12 +48,12 @@ namespace MDAWLib1
             Current = context;
         }
 
-        private void ResetPosition()
+        public void ResetPosition()
         {
             if (this.outStream != null)
             {
                 this.outStream.Seek(0, SeekOrigin.Begin);
-                this.SamplePosition = 0;
+                this.BytePosition = 0;
             }
         }
 
@@ -98,7 +99,7 @@ namespace MDAWLib1
         //    {
         //        return;
         //    }
-            
+
         //    if (WaveFormat.BitsPerSample == 16)
         //    {
         //        this.writer.Write((short)(32767f * sample));
@@ -141,12 +142,18 @@ namespace MDAWLib1
 
         public int Read(byte[] buffer, int offset, int count)
         {
-            if (buffer != null && this.outStream != null)
+            if (buffer == null || this.outStream == null)
             {
-                this.outStream.Read(buffer, offset, count);
-
-                this.SamplePosition += count / 2;
+                return 0;
             }
+            if (this.BytePosition == this.outStream.Length)
+            {
+                return 0;
+            }
+
+            count = this.outStream.Read(buffer, offset, count);
+
+            this.BytePosition += count;
 
             return count;
         }

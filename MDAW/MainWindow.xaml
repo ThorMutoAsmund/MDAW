@@ -62,7 +62,7 @@
         </Menu>
 
         <TabControl Margin="4" DockPanel.Dock="Bottom" >
-            <TabItem Header="Messages">
+            <TabItem Header="Visualization">
                 <local:TrackVisualizerControl></local:TrackVisualizerControl>
             </TabItem>
             <TabItem Header="Messages">
