@@ -16,10 +16,12 @@ namespace MDAWLib1
 {
     public class PlaybackContext : IWaveProvider
     {
+        public static event Action<double>? RenderFinished;
+
         private static PlaybackContext defaultContext = new PlaybackContext(new Song());
         public static PlaybackContext Current { get; private set; } = defaultContext;
         public Song Song { get; private set; }
-        private ISampleProvider SampleProvider => this.Song.SampleProvider;
+        private IProvider Provider => this.Song.Provider;
         public WaveFormat WaveFormat => this.Song.WaveFormat;
         public int SampleRate => this.Song.WaveFormat.SampleRate;
         public int BytePosition { get; set; }
@@ -73,10 +75,15 @@ namespace MDAWLib1
 
             int remaining = (int)(this.SampleRate * seconds);
 
+            if (this.Provider is IProvider baseProvider)
+            {
+                baseProvider.Reset();
+            }            
+
             while (remaining > 0)
             {
                 var count = Math.Min(14400, remaining);
-                var actual = this.SampleProvider.Read(this.buffer, 0, count);
+                var actual = this.Provider.Read(this.buffer, 0, count);
 
                 if (actual == 0)
                 {
@@ -91,6 +98,8 @@ namespace MDAWLib1
                     this.dataChunkSize += 4L;
                 }
             }
+
+            RenderFinished?.Invoke(seconds - (remaining / (double)this.SampleRate));
         }
 
         //public void WriteSample(float sample)

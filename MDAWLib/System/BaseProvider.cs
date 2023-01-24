@@ -26,6 +26,7 @@ namespace MDAWLib1
             this.Failure = failure;
         }
 
+        public abstract void Reset();
         public abstract int Read(float[] buffer, int offset, int count);
     }
 }

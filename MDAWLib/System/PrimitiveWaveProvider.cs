@@ -21,6 +21,11 @@ namespace MDAWLib1
             this.Frequency = frequency;
         }
 
+        public override void Reset()
+        {
+            this.ramp = 0;
+        }
+
         public override int Read(float[] buffer, int offset, int count)
         {
             if (this.Failed)

@@ -5,7 +5,7 @@ namespace DemoSong
 {
     public class Main : Song
     {
-        public override IProvider SampleProvider { get; } = new MyMixer();
+        public override IProvider Provider { get; } = new MyMixer();
         public override string Title { get; } = "My Demo Song2";
     }
 
@@ -15,10 +15,10 @@ namespace DemoSong
         public MyMixer() :
             base()
         {
-            var sine1 = new RisingProvider(440.0, 880.0, 100000.0);
-            var sine2 = new RisingProvider(660.0, 2*660.0, 100000.0);
-            //var sine = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
-            //var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 1220.0);
+            //var sine1 = new RisingProvider(440.0, 880.0, 100000.0);
+            //var sine2 = new RisingProvider(660.0, 2*660.0, 100000.0);
+            var sine1 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
+            var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 1220.0);
 
             Track track = new();
             track.ConnectTo(this.Tracks);
@@ -39,6 +39,11 @@ namespace DemoSong
             this.StartFrequency = startFrequency;
             this.EndFrequency = endFrequency;
             this.Speed = speed;
+        }
+
+        public override void Reset()
+        {
+            this.ramp = 0;
         }
 
         public override int Read(float[] buffer, int offset, int count)

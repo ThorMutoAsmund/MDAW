@@ -9,7 +9,7 @@ namespace MDAWLib1
 {
     public interface IHasInputs
     {
-        public IEnumerable<ISampleProvider> Inputs { get; }
+        public IEnumerable<IProvider> Inputs { get; }
     }
 
     public interface IVisualTrack

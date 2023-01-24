@@ -11,7 +11,7 @@ namespace MDAWLib1
     public class Song
     {
         private readonly static int DefaultSampleReate = 48000;
-        public virtual ISampleProvider SampleProvider => EmptyProvider.Instance;
+        public virtual IProvider Provider => EmptyProvider.Instance;
         public int SampleRate
         {
             get => this.sampleRate;

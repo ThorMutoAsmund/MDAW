@@ -42,6 +42,8 @@ namespace MDAW
             Env.ProjectChanged += ProjectChanged;
             Env.HasChangesChanged += SetTitle;
             Env.RecentFilesChanged += RecentFilesChanged;
+
+            PlaybackContext.RenderFinished += RenderFinished;
         }
 
         private void ProjectChanged()
@@ -108,6 +110,11 @@ namespace MDAW
                     this.recentFilesMenu.Items.Add(subMenu);
                 }
             }
+        }
+
+        private void RenderFinished(double seconds)
+        {
+            Env.OnAddMessage($"Rendered {seconds} seconds of audio");
         }
 
         private void SubMenu_Click(object sender, RoutedEventArgs e)

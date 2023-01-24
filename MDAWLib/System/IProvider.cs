@@ -9,5 +9,6 @@ namespace MDAWLib1
 {
     public interface IProvider : ISampleProvider
     {
+        void Reset();
     }
 }

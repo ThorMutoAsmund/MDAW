@@ -8,7 +8,7 @@
         Title="MDAW" 
         WindowStartupLocation="CenterScreen"        
         MinHeight="250" MinWidth="250"
-        Height="350" Width="350" Closing="Window_Closing">
+        Height="450" Width="550" Closing="Window_Closing">
     <Window.InputBindings>
         <KeyBinding Key="N" Modifiers="Control" Command="local:CustomCommands.NewProject"/>
         <KeyBinding Key="O" Modifiers="Control" Command="local:CustomCommands.OpenProject"/>
@@ -61,26 +61,31 @@
             </MenuItem>
         </Menu>
 
-        <TabControl Margin="4" DockPanel.Dock="Bottom" >
-            <TabItem Header="Visualization">
-                <local:TrackVisualizerControl></local:TrackVisualizerControl>
-            </TabItem>
-            <TabItem Header="Messages">
-                <ScrollViewer Name="outputScrollViewer">
-                    <TextBlock Name="outputTextBlock" Background="#fff" Padding="10">
-                        <TextBlock.ContextMenu>
-                            <ContextMenu>
-                                <MenuItem Name="outputTextBlockClear" Header="Clear" Click="outputTextBlockClear_Click" />
-                            </ContextMenu>
-                        </TextBlock.ContextMenu>
-                    </TextBlock>
-                </ScrollViewer>
-            </TabItem>
-            <TabItem Header="Samples">
-                <local:SamplesControl x:Name="sampleListControl"></local:SamplesControl>
-            </TabItem>
-            <TabItem Header="Plugins">
-            </TabItem>
-        </TabControl>
+        <Grid DockPanel.Dock="Bottom">
+            <Grid.RowDefinitions>
+                <RowDefinition/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
+
+            <TabControl Margin="4" Grid.Row="0">
+                <TabItem Header="Visualization">
+                    <local:TrackVisualizerControl></local:TrackVisualizerControl>
+                </TabItem>
+                <TabItem Header="Samples">
+                    <local:SamplesControl x:Name="sampleListControl"></local:SamplesControl>
+                </TabItem>
+                <TabItem Header="Plugins">
+                </TabItem>
+            </TabControl>
+            <ScrollViewer Name="outputScrollViewer" Height="100" Grid.Row="1">
+                <TextBlock Name="outputTextBlock" Background="#ddd" Padding="10">
+                    <TextBlock.ContextMenu>
+                        <ContextMenu>
+                            <MenuItem Name="outputTextBlockClear" Header="Clear" Click="outputTextBlockClear_Click" />
+                        </ContextMenu>
+                    </TextBlock.ContextMenu>
+                </TextBlock>
+            </ScrollViewer>
+        </Grid>
     </DockPanel>
 </Window>

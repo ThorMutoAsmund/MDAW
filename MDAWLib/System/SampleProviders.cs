@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class SampleProviders : List<ISampleProvider>
+    public class Providers : List<IProvider>
     {
     }
 }

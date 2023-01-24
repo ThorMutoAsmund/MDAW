@@ -10,65 +10,7 @@ namespace MDAWLib1
 {
     public class Mixer : MixerBase
     {
-        public SampleProviders Tracks { get; private set; } = new SampleProviders();
-        public override IEnumerable<ISampleProvider> Inputs => this.Tracks;
-
-    }
-
-    public abstract class MixerBase : BaseProvider, IHasInputs
-    {
-        public abstract IEnumerable<ISampleProvider> Inputs { get; }
-
-        private float[]? mixBuffer;
-
-        public MixerBase()
-        {
-        }
-
-        public override int Read(float[] buffer, int offset, int count)
-        {
-            if (this.Failed)
-            {
-                return 0;
-            }
-
-            int outputCount = 0;
-
-            this.mixBuffer = BufferHelpers.Ensure(this.mixBuffer, count);
-
-            var inputArray = this.Inputs.ToArray();
-            int index = inputArray.Length;
-
-            while (index > 0)
-            {
-                index--;
-
-                var source = inputArray[index];
-
-                // Here: Tell source what the current song position is? Relative position?
-
-                int samplesRead = source.Read(this.mixBuffer, 0, count);
-                if (samplesRead == 0)
-                {
-                    continue;
-                }
-
-                int outIndex = offset;
-                for (int n = 0; n < samplesRead; n++)
-                {
-                    if (n >= outputCount)
-                    {
-                        buffer[outIndex++] = this.mixBuffer[n];// * source.Gain;
-                    }
-                    else
-                    {
-                        buffer[outIndex++] += this.mixBuffer[n];// * source.Gain;
-                    }
-                }
-                outputCount = Math.Max(samplesRead, outputCount);
-            }
-
-            return outputCount;
-        }
+        public Providers Tracks { get; private set; } = new Providers();
+        public override IEnumerable<IProvider> Inputs => this.Tracks;
     }
 }

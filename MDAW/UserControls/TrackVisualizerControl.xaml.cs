@@ -46,7 +46,7 @@ namespace MDAW
         {
             this.mainStackPanel.Children.Clear();
 
-            if (project.Song?.SampleProvider is IHasInputs hasInputs)
+            if (project.Song?.Provider is IHasInputs hasInputs)
             {
                 foreach (var track in hasInputs.Inputs)
                 {

@@ -17,6 +17,10 @@ namespace MDAWLib1
             return provider;
         }
 
+        public override void Reset()
+        {
+        }
+
         public override int Read(float[] buffer, int offset, int count)
         {
             return 0;
