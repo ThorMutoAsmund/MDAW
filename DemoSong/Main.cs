@@ -17,13 +17,21 @@ namespace DemoSong
         {
             //var sine1 = new RisingProvider(440.0, 880.0, 100000.0);
             //var sine2 = new RisingProvider(660.0, 2*660.0, 100000.0);
-            var sine1 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
-            var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 1220.0);
+            //var sine1 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
+            //var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 880.0);
+
+            //Track track = new();
+            //track.ConnectTo(this.Tracks);
+            //sine1.ConnectTo(track.Parts);
 
             Track track = new();
             track.ConnectTo(this.Tracks);
-            sine1.ConnectTo(track.Parts);
-            sine2.ConnectTo(track.Parts, (int)(1.0 * this.SampleRate));
+            for (int i = 0; i < 36; i++)
+            {
+                var sine = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0 * Math.Pow(2, i / 12.0));
+                sine.ConnectTo(track.Parts, Position.FromSeconds(i / 36.0), gain: 0.003, name: $"Sine {i}");
+            }
+
         }
     }
     public class RisingProvider : BaseProvider
@@ -32,8 +40,6 @@ namespace DemoSong
         public double EndFrequency { get; private set; }
         public double Speed { get; private set; }
 
-        private int ramp = 0;
-        
         public RisingProvider(double startFrequency = 440.0, double endFrequency = 880.0, double speed = 100000.0)
         {
             this.StartFrequency = startFrequency;
@@ -41,14 +47,9 @@ namespace DemoSong
             this.Speed = speed;
         }
 
-        public override void Reset()
-        {
-            this.ramp = 0;
-        }
-
         public override int Read(float[] buffer, int offset, int count)
         {
-            if (this.Failed)
+            if (this.Finished)
             {
                 return 0;
             }
@@ -59,24 +60,25 @@ namespace DemoSong
             double freq = 0.0;
             while (i < count / this.Channels)
             {
-                freq = this.StartFrequency + (this.EndFrequency - this.StartFrequency) * (this.ramp + i) / this.Speed;
+                freq = this.StartFrequency + (this.EndFrequency - this.StartFrequency) * (this.Index / 2 + i) / this.Speed;
                 if (freq > this.EndFrequency)
                 {
+                    Finish();
                     break;
                 }
 
-                var f = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * freq;
-                //var ff = 1.0 / this.WaveFormat.Channels / this.SampleRate * 2 * Math.PI * this.StartFrequency;
+                var f = 1.0 / this.SampleRate * 2 * Math.PI * freq;
 
-                buffer[offset + i * this.Channels] = (float)(Math.Sin((i + ramp) * f) * 2f - 1f);
+                buffer[offset + i * this.Channels] = (float)(Math.Sin((i + this.Index / 2) * f) * 2f - 1f);
                 if (this.Channels > 1)
                 {
-                    buffer[offset + i * this.Channels + 1] = 0f;// (float)(Math.Sin((i + ramp) * ff) * 2f - 1f);
+                    buffer[offset + i * this.Channels + 1] = buffer[offset + i * this.Channels];
                 }
 
                 i++;
             }
-            ramp += i;
+
+            this.Index += i * 2;
 
             return i * 2;
         }

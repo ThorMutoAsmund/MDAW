@@ -15,18 +15,29 @@ namespace MDAWLib1
         public WaveFormat WaveFormat => this.Context.Song.WaveFormat;
         public int SampleRate => this.Context.Song.WaveFormat.SampleRate;
         public int Channels => this.Context.Song.WaveFormat.Channels;
-        public bool Failed { get; set; }
+        public bool Finished { get; set; }
         public string Failure { get; set; } = String.Empty;
+        protected int Index { get; set; }
 
         private PlaybackContext Context => PlaybackContext.Current;
 
         protected void Fail(string failure)
         {
-            this.Failed = true;
+            this.Finished = true;
             this.Failure = failure;
         }
 
-        public abstract void Reset();
+        public virtual void Reset()
+        {
+            this.Index = 0;
+            this.Finished = false;
+        }
+
+        protected void Finish(bool finishIf = true)
+        {
+            this.Finished = finishIf;
+        }
+
         public abstract int Read(float[] buffer, int offset, int count);
     }
 }

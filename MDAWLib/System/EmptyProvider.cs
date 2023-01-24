@@ -19,6 +19,7 @@ namespace MDAWLib1
 
         public override void Reset()
         {
+            this.Finished = true;
         }
 
         public override int Read(float[] buffer, int offset, int count)

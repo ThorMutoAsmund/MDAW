@@ -9,10 +9,11 @@ namespace MDAWLib1
 {
     public static class IProviderExtensions
     {
-        public static void ConnectTo(this IProvider source, Parts destination, int startAt = 0, float gain = 1f)
+        public static void ConnectTo(this IProvider source, Parts destination, Position startAt = default, double gain = 1f, string name = "")
         {
-            destination.Add(new Part(source, startAt: startAt, gain: gain));
+            destination.Add(new Part(source, startAt: startAt, gain: gain, name: name));
         }
+
         public static void ConnectTo(this IProvider source, Providers destination)
         {
             destination.Add(source);

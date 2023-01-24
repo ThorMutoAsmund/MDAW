@@ -11,14 +11,20 @@ namespace MDAWLib1
     {
         public WaveFormat WaveFormat => this.Provider.WaveFormat;
         public IProvider Provider { get; set; }
-        public int StartAt { get; set; }
-        public float Gain { get; set; }
+        public string Name { get; set; }
+        public bool Finished => this.Provider.Finished;
+        public double Gain { get; set; }
+        public int StartIndex { get; private set; }
 
-        public Part(IProvider provider, int startAt = 0, float gain = 1f)
+        private float gainFloat;
+
+        public Part(IProvider provider, Position startAt, double gain, string name)
         {
             this.Provider = provider;
-            this.StartAt = startAt;
+            this.Name = name;
+            this.StartIndex = startAt.GetIndex(provider.WaveFormat);
             this.Gain = gain;
+            this.gainFloat = (float)gain;
         }
 
         public void Reset()
@@ -29,6 +35,11 @@ namespace MDAWLib1
         public int Read(float[] buffer, int offset, int count)
         {
             return this.Provider.Read(buffer, offset, count);
+        }
+
+        public float ApplyGainTo(float input)
+        {
+            return input * this.gainFloat;
         }
     }
 }
