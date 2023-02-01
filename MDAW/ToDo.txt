@@ -4,6 +4,10 @@ Parameters should be mono
 
 Mixers reset their inputs
 
-Support for mono provides!
+Support for mono providers!
 
 Reuse the outputbuffer system
+
+Shortcut to bring up sampler program which records to the /Samples directory
+
+Tracks and all other providers should write to output buffer

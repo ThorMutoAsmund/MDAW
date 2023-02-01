@@ -18,7 +18,7 @@ namespace MDAWLib1
         public int Channels => this.Context.Song.WaveFormat.Channels;
         public bool Finished { get; set; }
         public string Failure { get; set; } = String.Empty;
-        protected float[]? OutputBuffer => this.outputBuffer;
+        public float[]? OutputBuffer => this.outputBuffer;
 
         protected int Index { get; set; }
 
