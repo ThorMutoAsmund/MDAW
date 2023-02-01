@@ -1,15 +1,24 @@
 ﻿using MDAWLib1;
+using NAudio.Utils;
 using NAudio.Wave;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using System.Diagnostics;
+using System.Threading;
 
 namespace MDAW
 {
     public static class Audio
     {
+        public static event Action<TimeSpan>? PositionChanged;
+
+        private static TimeSpan AccumulatedTimeSpan;
+
+        private static Timer PositionTimer = new Timer(
+            PositionTimerCallback,
+            null,
+            Timeout.Infinite,
+            Timeout.Infinite);
+        
         private static WaveOutEvent? waveOut;
         public static WaveOutEvent WaveOut
         {
@@ -19,9 +28,14 @@ namespace MDAW
                 {
                     waveOut = new WaveOutEvent();
                     waveOut.PlaybackStopped += WaveOut_PlaybackStopped;
-    }
+                }
                 return waveOut;
             }
+        }
+
+        static void PositionTimerCallback(object? state)
+        {
+            PositionChanged?.Invoke(AccumulatedTimeSpan + WaveOut.GetPositionTimeSpan());
         }
 
         private static bool resetWhenStopping = false;
@@ -32,7 +46,10 @@ namespace MDAW
 
             if (resetWhenStopping && WaveOut.PlaybackState == PlaybackState.Stopped)
             {
+                PositionTimer.Change(Timeout.Infinite, Timeout.Infinite); 
+
                 PlaybackContext.Current.ResetPosition();
+                AccumulatedTimeSpan = TimeSpan.Zero;
             }
         }
 
@@ -42,6 +59,7 @@ namespace MDAW
 
             if (WaveOut.PlaybackState != PlaybackState.Stopped)
             {
+                AccumulatedTimeSpan += WaveOut.GetPositionTimeSpan();
                 WaveOut.Stop();
                 //    if (fileReader != null)
                 //    {
@@ -64,14 +82,16 @@ namespace MDAW
 
             WaveOut.Init(PlaybackContext.Current);
             WaveOut.Play();
+            PositionTimer.Change(TimeSpan.Zero, TimeSpan.FromSeconds(0.1f));
         }
 
         public static void Stop()
         {
+            PositionTimer.Change(Timeout.Infinite, Timeout.Infinite);
             EnsureStopped();
         }
 
-        public static void Play()
+        public static void StopPlay()
         {
             if (WaveOut.PlaybackState == PlaybackState.Stopped)
             {
@@ -79,15 +99,22 @@ namespace MDAW
 
                 InternalPlay();
             }
+            else
+            {
+                PositionTimer.Change(Timeout.Infinite, Timeout.Infinite);
+                EnsureStopped();
+            }
         }
 
         public static void PlayFromStart()
         {
             Env.OnAddMessage($"Playing from start");
-                        
+
+            PositionTimer.Change(Timeout.Infinite, Timeout.Infinite);
             EnsureStopped(); 
             
             PlaybackContext.Current.ResetPosition();
+            AccumulatedTimeSpan = TimeSpan.Zero;
 
             InternalPlay();
         }

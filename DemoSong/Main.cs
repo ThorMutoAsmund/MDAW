@@ -6,7 +6,11 @@ namespace DemoSong
     public class Main : Song
     {
         public override IProvider Provider { get; } = new MyMixer();
-        public override string Title { get; } = "My Demo Song2";
+        public override string Title { get; } = "My Demo Song";
+        public override int SampleRate { get; } = 44100;
+        public Main()
+        {
+        }
     }
 
 
@@ -20,17 +24,27 @@ namespace DemoSong
             //var sine1 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0);
             //var sine2 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 880.0);
 
-            //Track track = new();
-            //track.ConnectTo(this.Tracks);
-            //sine1.ConnectTo(track.Parts);
+            var doky1 = new AudioFileProvider("Samples/doky01.wav");
+            var doky2 = new AudioFileProvider("Samples/doky02.wav");
 
-            Track track = new();
-            track.ConnectTo(this.Tracks);
-            for (int i = 0; i < 36; i++)
-            {
-                var sine = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0 * Math.Pow(2, i / 12.0));
-                sine.ConnectTo(track.Parts, Position.FromSeconds(i / 36.0), gain: 0.003, name: $"Sine {i}");
-            }
+            var track1 = new Track().ConnectTo(this.Tracks);
+            var track2 = new Track().ConnectTo(this.Tracks);
+
+            doky1.ConnectTo(track1.Parts);
+            doky2.ConnectTo(track2.Parts, startAt: Position.FromSeconds(() => doky1.LengthInSeconds));
+            //var sine1 = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0).ConnectTo(track.Parts);
+
+            //new LinearProvider(440.0, 880.0, 5.0).ConnectTo(sine1.Frequency);
+
+
+
+            //for (int i = 0; i < 3; i++)
+            //{
+            //    Track track = new();
+            //    track.ConnectTo(this.Tracks);
+            //    var sine = new PrimitiveWaveProvider(PrimitiveWaveType.Sine, 440.0 * Math.Pow(2, i / 12.0));
+            //    sine.ConnectTo(track.Parts, Position.FromSeconds(i), gain: 0.1, name: $"Sine {i}");
+            //}
 
         }
     }
@@ -69,7 +83,7 @@ namespace DemoSong
 
                 var f = 1.0 / this.SampleRate * 2 * Math.PI * freq;
 
-                buffer[offset + i * this.Channels] = (float)(Math.Sin((i + this.Index / 2) * f) * 2f - 1f);
+                buffer[offset + i * this.Channels] = (float)(Math.Sin((i + this.Index / 2) * f));
                 if (this.Channels > 1)
                 {
                     buffer[offset + i * this.Channels + 1] = buffer[offset + i * this.Channels];

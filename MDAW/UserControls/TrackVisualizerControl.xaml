@@ -6,7 +6,18 @@
              xmlns:local="clr-namespace:MDAW"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel Name="mainStackPanel" Orientation="Vertical">
-            
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="auto" />
+        </Grid.RowDefinitions>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">            
+            <ScrollBar Name="zoomScrollBar" Orientation="Horizontal"  Grid.Row="0" ValueChanged="zoomScrollBar_ValueChanged" Width="100" Minimum="0" Maximum="9" ViewportSize="5"></ScrollBar>
+            <TextBlock Name="positionTextBlock">0:00.00</TextBlock>
+        </StackPanel>
+        <StackPanel Name="mainStackPanel" Orientation="Vertical" Grid.Row="1">
+        </StackPanel>
+        <ScrollBar Name="mainScrollBar" Orientation="Horizontal"  Grid.Row="2" ValueChanged="mainScrollBar_ValueChanged"></ScrollBar>
+    </Grid>
 </UserControl>

@@ -18,36 +18,44 @@ namespace MDAWLib1
     {
         public static event Action<double>? RenderFinished;
 
-        private static PlaybackContext defaultContext = new PlaybackContext(new Song());
+        private static PlaybackContext defaultContext = new PlaybackContext(new Song(), string.Empty);
         public static PlaybackContext Current { get; private set; } = defaultContext;
         public Song Song { get; private set; }
+        public string RootPath { get; private set; }
         private IProvider Provider => this.Song.Provider;
         public WaveFormat WaveFormat => this.Song.WaveFormat;
         public int SampleRate => this.Song.WaveFormat.SampleRate;
+        public int Channels => this.Song.WaveFormat.Channels;
         public int BytePosition { get; set; }
         public int SamplePosition => this.BytePosition / this.BytesPerSample;
 
         public long Length => dataChunkSize;
 
+        private const int MinBufferAmount = 14400;
         private int BytesPerSample => this.WaveFormat.BitsPerSample / 8;
 
         private long dataChunkSize;
         private MemoryStream? outStream;
+        private float[]? buffer;
 
-        private PlaybackContext(Song song)
+        private PlaybackContext(Song song, string rootPath)
         {
             this.Song = song;
+            this.RootPath = rootPath;
             this.BytePosition = 0;
         }
 
-        public static void CreateFromSong(Song song, double offset = 0d)
+        public static void CreateFromProject(IProjectParameters projectParameters, double offset = 0d)
         {
-            var context = new PlaybackContext(song);
+            if (projectParameters?.Song == null)
+            {
+                return;
+            }
 
-            context.Render(10.0);
-            context.ResetPosition();
+            Current = new PlaybackContext(projectParameters.Song, projectParameters.RootPath);
 
-            Current = context;
+            Current.Render(20.0);
+            Current.ResetPosition();
         }
 
         public void ResetPosition()
@@ -59,7 +67,6 @@ namespace MDAWLib1
             }
         }
 
-        private float[]? buffer;
         private void Render(double seconds = 10.0)
         {
             if (this.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
@@ -67,22 +74,19 @@ namespace MDAWLib1
                 throw new InvalidOperationException("Only 16, 24 or 32 bit PCM or IEEE float audio data supported");
             }
 
-            this.buffer = BufferHelpers.Ensure(this.buffer, 14400);
+            this.buffer = BufferHelpers.Ensure(this.buffer, MinBufferAmount);
 
             this.outStream = new MemoryStream();
 
             var writer = new BinaryWriter(this.outStream);
 
-            int remaining = (int)(this.SampleRate * seconds);
+            int remaining = (int)(this.SampleRate * seconds * this.Channels);
 
-            if (this.Provider is IProvider baseProvider)
-            {
-                baseProvider.Reset();
-            }            
+            this.Provider.Reset();
 
             while (remaining > 0)
             {
-                var count = Math.Min(14400, remaining);
+                var count = Math.Min(MinBufferAmount, remaining);
                 var actual = this.Provider.Read(this.buffer, 0, count);
 
                 if (actual == 0)
@@ -101,53 +105,6 @@ namespace MDAWLib1
 
             RenderFinished?.Invoke(seconds - (remaining / (double)this.SampleRate));
         }
-
-        //public void WriteSample(float sample)
-        //{
-        //    if (this.writer == null)
-        //    {
-        //        return;
-        //    }
-
-        //    if (WaveFormat.BitsPerSample == 16)
-        //    {
-        //        this.writer.Write((short)(32767f * sample));
-        //        this.dataChunkSize += 2L;
-        //    }
-        //    else if (this.WaveFormat.BitsPerSample == 24)
-        //    {
-        //        byte[] bytes = BitConverter.GetBytes((int)(2.14748365E+09f * sample));
-        //        this.value24[0] = bytes[1];
-        //        this.value24[1] = bytes[2];
-        //        this.value24[2] = bytes[3];
-        //        this.writer.Write(value24);
-        //        this.dataChunkSize += 3L;
-        //    }
-        //    else if (this.WaveFormat.BitsPerSample == 32 && this.WaveFormat.Encoding == WaveFormatEncoding.Extensible)
-        //    {
-        //        this.writer.Write(65535 * (int)sample);
-        //        this.dataChunkSize += 4L;
-        //    }
-        //    else
-        //    {
-        //        if (this.WaveFormat.Encoding != WaveFormatEncoding.IeeeFloat)
-        //        {
-        //            throw new InvalidOperationException("Only 16, 24 or 32 bit PCM or IEEE float audio data supported");
-        //        }
-
-        //        this.writer.Write(sample);
-        //        this.dataChunkSize += 4L;
-        //    }
-        //}
-
-        //public void WriteSamples(float[] samples, int offset, int count)
-        //{
-        //    for (int i = 0; i < count; i++)
-        //    {
-        //        WriteSample(samples[offset + i]);
-        //    }
-        //}
-
 
         public int Read(byte[] buffer, int offset, int count)
         {

@@ -14,15 +14,26 @@ namespace MDAWLib1
         public string Name { get; set; }
         public bool Finished => this.Provider.Finished;
         public double Gain { get; set; }
-        public int StartIndex { get; private set; }
+        public int StartIndex 
+        { 
+            get
+            {
+                this.startIndex ??= this.StartAt.GetIndex(this.Provider.WaveFormat);
+                
+                return this.startIndex.Value;
+            }
+    }
+        public Position StartAt { get; private set; }
 
+        public float[]? OutputBuffer => this.Provider.OutputBuffer;
+        
         private float gainFloat;
-
+        public int? startIndex;
         public Part(IProvider provider, Position startAt, double gain, string name)
         {
             this.Provider = provider;
             this.Name = name;
-            this.StartIndex = startAt.GetIndex(provider.WaveFormat);
+            this.StartAt = startAt;
             this.Gain = gain;
             this.gainFloat = (float)gain;
         }

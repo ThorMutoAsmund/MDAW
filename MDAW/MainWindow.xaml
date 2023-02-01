@@ -14,10 +14,9 @@
         <KeyBinding Key="O" Modifiers="Control" Command="local:CustomCommands.OpenProject"/>
         <KeyBinding Key="F4" Modifiers="Control" Command="local:CustomCommands.CloseProject"/>
         <KeyBinding Key="E" Modifiers="Control" Command="local:CustomCommands.StartEditor"/>
-        <KeyBinding Key="F5" Command="local:CustomCommands.Play"/>
+        <KeyBinding Key="F5" Command="local:CustomCommands.PlayFromStart"/>
         <KeyBinding Key="F6" Command="local:CustomCommands.PlayPattern"/>
-        <KeyBinding Key="F5" Modifiers="Control" Command="local:CustomCommands.PlayFromStart"/>
-        <KeyBinding Key="Esc" Command="local:CustomCommands.Stop"/>
+        <KeyBinding Key="Space" Command="local:CustomCommands.StopPlay"/>
         <KeyBinding Key="F1" Command="local:CustomCommands.About"/>
         <KeyBinding Key="D1" Modifiers="Alt" Command="local:CustomCommands.RecentFile1"/>
     </Window.InputBindings>
@@ -40,9 +39,9 @@
                 <MenuItem Name="exitMenu" Header="_Exit" InputGestureText="Alt+F4" Command="local:CustomCommands.ExitApplication" />
             </MenuItem>
             <MenuItem Header="_Transport">
-                <MenuItem Name="playMenu" Header="_Play" InputGestureText="F5" Command="local:CustomCommands.Play" />
+                <MenuItem Name="playFromStartMenu" Header="_Play from start" InputGestureText="F5" Command="local:CustomCommands.PlayFromStart" />
                 <MenuItem Name="playPatternMenu" Header="_Play pattern" InputGestureText="F6" Command="local:CustomCommands.PlayPattern" />
-                <MenuItem Name="playFromStartMenu" Header="_Play from start" InputGestureText="Ctrl+F5" Command="local:CustomCommands.PlayFromStart" />
+                <MenuItem Name="playMenu" Header="_Stop/Play" InputGestureText="Space" Command="local:CustomCommands.StopPlay" />
                 <Separator />
                 <MenuItem Name="stopMenu" Header="_Stop" InputGestureText="Esc" Command="local:CustomCommands.Stop" />
             </MenuItem>
@@ -76,6 +75,36 @@
                 </TabItem>
                 <TabItem Header="Plugins">
                 </TabItem>
+                <!--<TabControl.Template>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+
+                        <Grid x:Name="templateRoot" ClipToBounds="true" SnapsToDevicePixels="true" KeyboardNavigation.TabNavigation="Local">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition x:Name="ColumnDefinition0"/>
+                                <ColumnDefinition x:Name="ColumnDefinition1" Width="0"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid.RowDefinitions>
+                                <RowDefinition x:Name="RowDefinition0" Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition x:Name="RowDefinition1" Height="*"/>
+                            </Grid.RowDefinitions>
+                            <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="0,0,0,1" SnapsToDevicePixels="True">
+                                <TabPanel x:Name="headerPanel" Background="Transparent" Grid.Column="0" IsItemsHost="true" Margin="2,2,2,0" Grid.Row="0" KeyboardNavigation.TabIndex="1" Panel.ZIndex="1"/>
+                            </Border>
+                            <Border Grid.Row="1" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,0,1,0" SnapsToDevicePixels="True">
+                                <TextBox Margin="10" />
+                            </Border>
+                            <Border x:Name="contentPanel" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="1,0,1,1" Background="{TemplateBinding Background}" Grid.Column="0" KeyboardNavigation.DirectionalNavigation="Contained" Grid.Row="2" KeyboardNavigation.TabIndex="2" KeyboardNavigation.TabNavigation="Local">
+                                <ContentPresenter x:Name="PART_SelectedContentHost" ContentSource="SelectedContent" Margin="{TemplateBinding Padding}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
+                            </Border>
+                        </Grid>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsEnabled" Value="false">
+                                <Setter Property="TextElement.Foreground" TargetName="templateRoot" Value="{DynamicResource {x:Static SystemColors.GrayTextBrushKey}}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </TabControl.Template>-->
             </TabControl>
             <ScrollViewer Name="outputScrollViewer" Height="100" Grid.Row="1">
                 <TextBlock Name="outputTextBlock" Background="#ddd" Padding="10">

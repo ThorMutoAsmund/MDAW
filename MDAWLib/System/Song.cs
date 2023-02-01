@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Versioning;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,17 +11,9 @@ namespace MDAWLib1
 {
     public class Song
     {
-        private readonly static int DefaultSampleReate = 48000;
-        public virtual IProvider Provider => EmptyProvider.Instance;
-        public int SampleRate
-        {
-            get => this.sampleRate;
-            set
-            {
-                this.sampleRate = value;
-                this.waveFormat = null;
-            }
-        }
+        private readonly static int DefaultSampleRate = 48000;
+        public virtual IProvider Provider { get; } = EmptyProvider.Instance;
+        public virtual int SampleRate { get; } = DefaultSampleRate;
 
         public WaveFormat WaveFormat
         {
@@ -34,7 +27,7 @@ namespace MDAWLib1
 
         public virtual string Title { get; } = "untitled";
 
-        private int sampleRate = DefaultSampleReate;
+        private int sampleRate = DefaultSampleRate;
         private WaveFormat? waveFormat;
 
         public Song()

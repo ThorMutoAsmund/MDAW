@@ -11,5 +11,7 @@ namespace MDAWLib1
     {
         bool Finished { get; }
         void Reset();
+
+        float[]? OutputBuffer { get; }
     }
 }

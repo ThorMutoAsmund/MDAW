@@ -9,12 +9,18 @@ using System.Threading.Tasks;
 
 namespace MDAWLib1
 {
-    public class Track : MixerBase
+    public class Track : MixerBase, IVisualTrack
     {
         public Parts Parts { get; private set; } = new Parts();
         public override IEnumerable<IProvider> Inputs => this.Parts;
 
+        public float[] VisualBuffer => this.visualBuffer;
+
         protected List<Part> remainingParts = new List<Part>();
+
+        private int totalCount;
+        private float[] visualBuffer = new float[0];
+
         public Track()
         {
         }
@@ -27,6 +33,7 @@ namespace MDAWLib1
             }
 
             this.remainingParts = this.Parts.ToList();
+            this.totalCount = 0;
         }
 
         public override int Read(float[] buffer, int offset, int count)
@@ -38,7 +45,7 @@ namespace MDAWLib1
 
             int outputCount = 0;
 
-            EnsureMixbuffer(count);
+            EnsureMixBuffer(count);
 
             if (this.mixBuffer == null)
             {
@@ -89,8 +96,38 @@ namespace MDAWLib1
 
             Finish(this.remainingParts.Count == 0);
 
+            // Copy to visual buffer
+            this.visualBuffer = Ensure(this.visualBuffer, this.totalCount + outputCount / this.Channels);
+
+            for (int i = 0; i < outputCount / this.Channels; i++)
+            {
+                var value = buffer[offset + i * this.Channels];
+                if (this.Channels > 1)
+                {
+                    value = (value + buffer[offset + i * this.Channels + 1]) * 0.5f;
+                }
+                this.visualBuffer[this.totalCount + i] = value;
+            }
+
+            this.totalCount += outputCount / this.Channels;
+
             return outputCount;
         }
 
+        public static float[] Ensure(float[] buffer, int samplesRequired)
+        {
+            if (buffer == null || buffer.Length < samplesRequired)
+            {
+                var newBuffer = new float[samplesRequired];
+                if (buffer != null)
+                {
+                    Array.Copy(buffer, 0, newBuffer, 0, buffer.Length);
+                }
+
+                buffer = newBuffer;
+            }
+
+            return buffer;
+        }
     }
 }

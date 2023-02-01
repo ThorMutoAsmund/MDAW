@@ -17,7 +17,7 @@ namespace MDAW
         public static ICommand RecentFile1 = new CustomCommand(Env.OpenRecentFile1);
         public static ICommand ExitApplication = new CustomCommand(ApplicationCommands.ExitApplication);
         
-        public static ICommand Play = new CustomCommand(Audio.Play, () => Env.Project != null);
+        public static ICommand StopPlay = new CustomCommand(Audio.StopPlay, () => Env.Project != null);
         public static ICommand PlayPattern = new CustomCommand(Audio.PlayPattern, () => Env.Project != null);
         public static ICommand PlayFromStart = new CustomCommand(Audio.PlayFromStart, () => Env.Project != null);
         public static ICommand Stop = new CustomCommand(Audio.Stop, () => Env.Project != null);

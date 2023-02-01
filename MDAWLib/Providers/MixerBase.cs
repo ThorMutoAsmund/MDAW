@@ -19,7 +19,7 @@ namespace MDAWLib1
         {
         }
 
-        protected void EnsureMixbuffer(int count)
+        protected void EnsureMixBuffer(int count)
         {
             this.mixBuffer = BufferHelpers.Ensure(this.mixBuffer, count);
         }

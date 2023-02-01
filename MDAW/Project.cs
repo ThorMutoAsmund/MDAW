@@ -14,7 +14,7 @@ using System.Xml.Linq;
 
 namespace MDAW
 {
-    public class Project
+    public class Project : IProjectParameters
     {
         public string ProjectPath { get; private set; }
         public string RootPath { get; private set; }
@@ -144,7 +144,7 @@ namespace MDAW
                                 this.Song = myObject as Song;
                                 if (this.Song != null)
                                 {
-                                    PlaybackContext.CreateFromSong(this.Song);
+                                    PlaybackContext.CreateFromProject(this);
 
                                     Env.OnDLLReloaded(this.Song);
                                 }

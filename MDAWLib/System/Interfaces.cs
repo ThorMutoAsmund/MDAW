@@ -14,6 +14,6 @@ namespace MDAWLib1
 
     public interface IVisualTrack
     {
-        public IEnumerable<double> MonoData { get; }
+        public float[] VisualBuffer { get; }
     }
 }

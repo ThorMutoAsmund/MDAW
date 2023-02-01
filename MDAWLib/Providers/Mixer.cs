@@ -34,7 +34,7 @@ namespace MDAWLib1
 
             int outputCount = 0;
 
-            EnsureMixbuffer(count);
+            EnsureMixBuffer(count);
 
             if (this.mixBuffer == null)
             {
