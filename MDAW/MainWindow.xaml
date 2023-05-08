@@ -19,6 +19,9 @@
         <KeyBinding Key="Space" Command="local:CustomCommands.StopPlay"/>
         <KeyBinding Key="F1" Command="local:CustomCommands.About"/>
         <KeyBinding Key="D1" Modifiers="Alt" Command="local:CustomCommands.RecentFile1"/>
+        <KeyBinding Key="F9" Command="local:CustomCommands.Record"/>
+        <KeyBinding Modifiers="Ctrl" Key="F9" Command="local:CustomCommands.RecordMidi"/>
+        <KeyBinding Modifiers="Shift + Ctrl" Key="F9" Command="local:CustomCommands.ImportFromYouTube"/>
     </Window.InputBindings>
     
     <DockPanel>
@@ -45,14 +48,14 @@
                 <Separator />
                 <MenuItem Name="stopMenu" Header="_Stop" InputGestureText="Esc" Command="local:CustomCommands.Stop" />
             </MenuItem>
-            <MenuItem Header="Test">
-            </MenuItem>
-            <!--<MenuItem Header="_Sample">
-                <MenuItem Name="sampleImportMenu" Header="Import..." Click="sampleImportMenu_Click" />
-                <Separator />
-                <MenuItem Name="recordMenu" Header="Record..." Click="recordMenu_Click" />
-                <MenuItem Name="youTubeMenu" Header="Import from YouTube..." Click="youTubeMenu_Click" />
+            <!--<MenuItem Header="Test">
             </MenuItem>-->
+            <MenuItem Header="_Import">
+                <MenuItem Name="recordMenu" Header="Record audio..." InputGestureText="F9" Command="local:CustomCommands.Record" />
+                <MenuItem Name="recordMidiMenu" Header="Record midi..." InputGestureText="Ctrl+F9" Command="local:CustomCommands.RecordMidi"/>
+                <Separator />
+                <MenuItem Name="importFromYouTubeMenu" Header="Import from YouTube..." InputGestureText="Ctrl+Shift+F9" Command="local:CustomCommands.ImportFromYouTube" />
+            </MenuItem>
             <MenuItem Header="_Help">
                 <MenuItem Name="stayOnTopMenu" Header="_Stay On Top" IsChecked="True" IsCheckable="True" Click="StayOnTopMenu_Click"/>
                 <Separator />

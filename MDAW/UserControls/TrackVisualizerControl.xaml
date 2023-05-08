@@ -14,7 +14,7 @@
         </Grid.RowDefinitions>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">            
             <ScrollBar Name="zoomScrollBar" Orientation="Horizontal"  Grid.Row="0" ValueChanged="zoomScrollBar_ValueChanged" Width="100" Minimum="0" Maximum="9" ViewportSize="5"></ScrollBar>
-            <TextBlock Name="positionTextBlock">0:00.00</TextBlock>
+            <TextBlock Margin="10,0,0,0" Name="positionTextBlock">0:00.00</TextBlock>
         </StackPanel>
         <StackPanel Name="mainStackPanel" Orientation="Vertical" Grid.Row="1">
         </StackPanel>

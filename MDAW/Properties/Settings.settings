@@ -8,5 +8,8 @@
     <Setting Name="RecentFiles" Type="System.Collections.Specialized.StringCollection" Scope="User">
       <Value Profile="(Default)" />
     </Setting>
+    <Setting Name="SamplesFolder" Type="System.String" Scope="User">
+      <Value Profile="(Default)">Samples</Value>
+    </Setting>
   </Settings>
 </SettingsFile>

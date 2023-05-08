@@ -45,5 +45,17 @@ namespace MDAW.Properties {
                 this["RecentFiles"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("Samples")]
+        public string SamplesFolder {
+            get {
+                return ((string)(this["SamplesFolder"]));
+            }
+            set {
+                this["SamplesFolder"] = value;
+            }
+        }
     }
 }

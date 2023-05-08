@@ -22,6 +22,11 @@ namespace MDAW
         public static ICommand PlayFromStart = new CustomCommand(Audio.PlayFromStart, () => Env.Project != null);
         public static ICommand Stop = new CustomCommand(Audio.Stop, () => Env.Project != null);
 
+        public static ICommand Record = new CustomCommand(ImportCommands.Record, () => Env.Project != null);
+        public static ICommand RecordMidi = new CustomCommand(ImportCommands.RecordMidi, () => Env.Project != null);
+        public static ICommand ImportFromYouTube = new CustomCommand(ImportCommands.ImportFromYouTube, () => Env.Project != null);
+
+
         public static ICommand About = new CustomCommand(HelpCommands.About);
     }
 

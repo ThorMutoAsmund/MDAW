@@ -14,6 +14,8 @@ namespace MDAW
 {
     public static class Env
     {
+        public static MainWindow? MainWindow;
+
         public static event Action<string>? AddMessage;
         public static event Action? HasChangesChanged;
         public static event Action? ProjectChanged;

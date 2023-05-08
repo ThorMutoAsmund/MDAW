@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Windows;
 
 namespace MDAW
@@ -18,6 +19,30 @@ namespace MDAW
             }
 
             return true;
+        }
+
+        public static bool CreateFolderIfNotFound(string path)
+        {
+            if (Directory.Exists(path))
+            {
+                return true;
+            }
+
+            if (MessageBox.Show($"Directory {path} does not exist. Create?", "Directory Not Found", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            {
+                return false;
+            }
+
+            try
+            {
+                Directory.CreateDirectory(path);
+                return true;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(ex.Message);
+            }
+            return false;
         }
 
         public static bool SelectProject(out string selectedProjectPath)

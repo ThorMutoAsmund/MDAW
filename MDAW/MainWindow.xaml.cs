@@ -28,6 +28,9 @@ namespace MDAW
         public MainWindow()
         {
             InitializeComponent();
+
+            Env.MainWindow = this;
+
             ApplySettings();
 
             AddMessage($"======= {Env.ApplicationName} Started =======");
