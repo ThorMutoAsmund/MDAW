@@ -1,4 +1,5 @@
-﻿using MDAWLib1;
+﻿using MDAW.Properties;
+using MDAWLib1;
 using NAudio.Wave;
 using System;
 using System.Collections.Generic;
@@ -15,64 +16,52 @@ namespace MDAW
     /// </summary>
     public partial class SamplesControl : UserControl
     {
-        private Point dragStartPoint;
 
         public SamplesControl()
         {
             InitializeComponent();
 
-            //Song.SongChanged += Song_SongChanged;
-            //Env.Watchers.SamplesListChanged += Watchers_SamplesListChanged;
+            Env.ProjectChanged += Env_ProjectChanged;
+            Env.SamplesListChanged += Env_SamplesListChanged;
         }
 
-        private void Song_SongChanged(Song song)
+        private void Env_ProjectChanged()
         {
-            //if (action == SongChangedAction.Closed)
-            //{
-            //    this.DataContext = null;
-            //}
+            if (Env.Project == null)
+            {
+                this.DataContext = null;
+            }
         }
 
-        private void Watchers_SamplesListChanged(List<string> stringList)
+        private void Env_SamplesListChanged(List<string> sampleList)
         {
-            this.DataContext = stringList;
+            this.DataContext = sampleList;
         }
 
         private void listView_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
-            if (e.ChangedButton == MouseButton.Left && ((FrameworkElement)e.OriginalSource).DataContext is string fileName)
+            if (Env.Project == null)
             {
-                //Audio.PlayFile(fileName);
+                return;
+            }
+
+            if (e.ChangedButton == MouseButton.Left && ((FrameworkElement)e.OriginalSource).DataContext is string sampleName)
+            {
+                var samplePath = Path.Combine(Env.Project.RootPath, Settings.Default.SamplesFolder, sampleName);
+
+                Audio.PlayFile(samplePath);
             }
         }
 
         private void listView_MouseLeftButtonDown(object sender, MouseButtonEventArgs e)
         {
             Audio.Stop();
-            this.dragStartPoint = e.GetPosition(null);
         }
 
-        private void listView_PreviewMouseMove(object sender, MouseEventArgs e)
-        {
-            if (e.LeftButton == MouseButtonState.Pressed && this.listView.SelectedItem != null)
-            {
-                //// Get the current mouse position
-                //var mousePos = e.GetPosition(null);
-                //var diff = this.dragStartPoint - mousePos;
-
-                //var sampleName = this.listView.SelectedItem as string;
-                //this.listView.CheckDragDrop(diff, () => {
-                //    var length = DefaultSampleProvider.GetFileLength(Env.Song, sampleName);
-                //    return (sampleName, length);
-                //}
-                //, DragDropKey.Sample);
-            }
-        }
-
-        private void importMenu_Click(object sender, RoutedEventArgs e)
-        {
-            //Samples.ImportSamples();
-        }
+        //private void importMenu_Click(object sender, RoutedEventArgs e)
+        //{
+        //    //Samples.ImportSamples();
+        //}
 
         private void deleteMenu_Click(object sender, RoutedEventArgs e)
         {

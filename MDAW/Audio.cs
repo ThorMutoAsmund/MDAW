@@ -13,6 +13,8 @@ namespace MDAW
 
         private static TimeSpan AccumulatedTimeSpan;
 
+        private static WaveStream? PlaySampleFileReader;
+
         private static Timer PositionTimer = new Timer(
             PositionTimerCallback,
             null,
@@ -56,6 +58,13 @@ namespace MDAW
         private static bool EnsureStopped()
         {
             resetWhenStopping = false;
+
+            // Free any reference to the play sample file reader
+            if (PlaySampleFileReader != null)
+            {
+                PlaySampleFileReader.Dispose();
+                PlaySampleFileReader = null;
+            }
 
             if (WaveOut.PlaybackState != PlaybackState.Stopped)
             {
@@ -124,6 +133,30 @@ namespace MDAW
             Env.OnAddMessage($"Playing pattern");
 
             InternalPlay();
+        }
+
+        public static void PlayFile(string filePath)
+        {
+            EnsureStopped();
+
+            try
+            {
+                if (filePath.EndsWith("mp3"))
+                {
+                    PlaySampleFileReader = new Mp3FileReader(filePath);
+                }
+                else
+                {
+                    PlaySampleFileReader = new WaveFileReader(filePath);
+                }
+                WaveOut.Init(PlaySampleFileReader);
+                WaveOut.Play();
+            }
+            catch (Exception ex)
+            {
+                Env.OnAddMessage($"Error playing file: {ex.Message}");
+            }
+
         }
     }
 }

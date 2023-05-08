@@ -33,7 +33,7 @@ namespace MDAW
 
             ApplySettings();
 
-            AddMessage($"======= {Env.ApplicationName} Started =======");
+            Env_AddMessage($"======= {Env.ApplicationName} Started =======");
             SetTitle();
 
             if (Env.IsDebug)
@@ -41,15 +41,16 @@ namespace MDAW
                 Env.LastProjectPath = @"C:\Repos\MDAW\DemoSong";
             }
 
-            Env.AddMessage += AddMessage;
-            Env.ProjectChanged += ProjectChanged;
+            Env.AddMessage += Env_AddMessage;
+            Env.ProjectChanged += Env_ProjectChanged;
+            Env.DLLReloaded += SetTitle;
             Env.HasChangesChanged += SetTitle;
-            Env.RecentFilesChanged += RecentFilesChanged;
+            Env.RecentFilesChanged += Env_RecentFilesChanged;
 
             PlaybackContext.RenderFinished += RenderFinished;
         }
 
-        private void ProjectChanged()
+        private void Env_ProjectChanged()
         {
             SetTitle();
             Audio.Stop();
@@ -58,12 +59,12 @@ namespace MDAW
         private void SetTitle()
         {
             this.Title = Env.Project != null ?
-                $"{Env.ProjectName}{(Env.HasChanges ? "*" : string.Empty)} - {Env.ApplicationName}" :
+                $"{Env.ApplicationName} - {Env.ProjectSongTitle}{(Env.HasChanges ? "*" : string.Empty)} - {Env.ProjectRootPath}" :
                 Env.ApplicationName;
         }
 
         #region Messages
-        private void AddMessage(string s)
+        private void Env_AddMessage(string s)
         {
             this.outputTextBlock.Inlines.Add($"{(this.outputTextBlock.Text == string.Empty ? "" : "\n")}{s}");
             this.outputScrollViewer.ScrollToBottom();
@@ -88,10 +89,10 @@ namespace MDAW
             this.stayOnTopMenu.IsChecked = Settings.Default.StayOnTop;
             this.Topmost = Settings.Default.StayOnTop;
 
-            RecentFilesChanged();
+            Env_RecentFilesChanged();
         }
 
-        private void RecentFilesChanged()
+        private void Env_RecentFilesChanged()
         {
             this.recentFilesMenu.IsEnabled = Settings.Default.RecentFiles != null && Settings.Default.RecentFiles.Count > 0;
             this.recentFilesMenu.Items.Clear();

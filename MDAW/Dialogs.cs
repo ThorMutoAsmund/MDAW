@@ -8,6 +8,12 @@ namespace MDAW
     {
         public static string WaveFilesFilter = "Wave files (*.wav)|*.wav|All files (*.*)|*.*";
         public static string ProjectFilesFilter = "Project files (*.csproj)|*.csproj";
+
+        public static void NotImplemented()
+        {
+            MessageBox.Show($"Not implemented yet");
+        }
+
         public static bool ConfirmChangesMade()
         {
             if (Env.HasChanges)
@@ -109,6 +115,16 @@ namespace MDAW
         //        return result == System.Windows.Forms.DialogResult.OK;
         //    }
         //}
+
+        public static bool Confirm(string message)
+        {
+            if (MessageBox.Show($"{message}. Continue?", "Warning", MessageBoxButton.OKCancel) == MessageBoxResult.Cancel)
+            {
+                return false;
+            }
+
+            return true;
+        }
 
         public static void Message(string message)
         {

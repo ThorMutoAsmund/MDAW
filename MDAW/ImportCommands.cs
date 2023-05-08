@@ -33,7 +33,7 @@ namespace MDAW
                 return;
             }
 
-            MessageBox.Show($"{nameof(RecordMidi)} not implemented yet");
+            Dialogs.NotImplemented();
         }
 
         public static async void ImportFromYouTube()
@@ -51,6 +51,28 @@ namespace MDAW
                 if (Dialogs.CreateFolderIfNotFound(path))
                 {
                     await YouTubeImport.Import(dialog.Value, path);
+                }
+            }
+        }
+
+        public static void DeleteSample(string sampleName)
+        {
+            if (Env.Project == null)
+            {
+                return;
+            }
+
+            if (Dialogs.Confirm($"This wlil delete the sample {sampleName}"))
+            {
+                var filePath = Path.Combine(Env.Project.RootPath, Settings.Default.SamplesFolder, sampleName);
+
+                try
+                {
+                    File.Delete(filePath);
+                }
+                catch (Exception ex)
+                {
+                    Dialogs.Message($"Error deleting file: {ex.Message}");
                 }
             }
         }

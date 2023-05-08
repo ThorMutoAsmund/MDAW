@@ -19,7 +19,7 @@ namespace MDAW
         
         public static void StartEditor()
         {
-            MessageBox.Show($"{nameof(StartEditor)} not implemented yet");
+            Dialogs.NotImplemented();
         }
 
         public static void ExitApplication()

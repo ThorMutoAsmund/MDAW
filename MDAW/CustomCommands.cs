@@ -25,9 +25,46 @@ namespace MDAW
         public static ICommand Record = new CustomCommand(ImportCommands.Record, () => Env.Project != null);
         public static ICommand RecordMidi = new CustomCommand(ImportCommands.RecordMidi, () => Env.Project != null);
         public static ICommand ImportFromYouTube = new CustomCommand(ImportCommands.ImportFromYouTube, () => Env.Project != null);
+        public static ICommand DeleteSample = new CustomCommandWithParameter<string>(ImportCommands.DeleteSample, () => Env.Project != null);
 
 
         public static ICommand About = new CustomCommand(HelpCommands.About);
+    }
+
+    public class CustomCommandWithParameter<T> : ICommand where T : class
+    {
+#pragma warning disable 0067
+        public event EventHandler? CanExecuteChanged;
+#pragma warning restore 0067
+
+        private Action<T> execute;
+        private Func<bool>? canExecute;
+        public virtual bool CanExecute(object? parameter) => this.canExecute?.Invoke() ?? true;
+        public virtual void Execute(object? parameter)
+        {
+            if (parameter is T stringParameter)
+            {
+                this.execute?.Invoke(stringParameter);
+            }
+        }
+
+        public CustomCommandWithParameter(Action<T> command, Func<bool>? canExecute = null)
+        {
+            this.execute = command;
+            this.canExecute = canExecute;
+
+            Env.ProjectChanged += OnCanExecuteChanged;
+        }
+
+        ~CustomCommandWithParameter()
+        {
+            Env.ProjectChanged -= OnCanExecuteChanged;
+        }
+
+        public void OnCanExecuteChanged()
+        {
+            this.CanExecuteChanged?.Invoke(this, EventArgs.Empty);
+        }
     }
 
     public class CustomCommand : ICommand

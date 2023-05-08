@@ -6,22 +6,29 @@
              xmlns:local="clr-namespace:MDAW"
              mc:Ignorable="d" 
              d:DesignHeight="300" d:DesignWidth="300">
-    <ListView x:Name="listView" Margin="0,0,0,0" ItemsSource="{Binding}"
-            MouseDoubleClick="listView_MouseDoubleClick" PreviewMouseMove="listView_PreviewMouseMove" MouseLeftButtonDown="listView_MouseLeftButtonDown">
-        <ListView.ItemContainerStyle>
-            <Style TargetType="{x:Type ListViewItem}" />
-        </ListView.ItemContainerStyle>
-        <ListView.ItemTemplate>
-            <DataTemplate>
-                <TextBlock Text="{Binding}" />
-            </DataTemplate>
-        </ListView.ItemTemplate>
-        <ListView.ContextMenu>
-            <ContextMenu>
-                <MenuItem Header="Import..." Name="importMenu" Click="importMenu_Click" />
-                <Separator/>
-                <MenuItem Header="Delete" Name="deleteMenu" Click="deleteMenu_Click" />
-            </ContextMenu>
-        </ListView.ContextMenu>
-    </ListView>
+    <StackPanel Orientation="Vertical">
+        <Button Command="local:CustomCommands.DeleteSample" CommandParameter="{Binding ElementName=listView,Path=SelectedItem}"></Button>
+        <ListView x:Name="listView" Margin="0,0,0,0" ItemsSource="{Binding}" Height="300"
+            MouseDoubleClick="listView_MouseDoubleClick" MouseLeftButtonDown="listView_MouseLeftButtonDown">
+            <ListView.ItemContainerStyle>
+                <Style TargetType="{x:Type ListViewItem}" />
+            </ListView.ItemContainerStyle>
+            <ListView.ItemTemplate>
+                <DataTemplate>
+                    <TextBlock Text="{Binding}" />
+                </DataTemplate>
+            </ListView.ItemTemplate>
+            <ListView.ContextMenu>
+                <ContextMenu Name="contextMenu" DataContext="{Binding PlacementTarget.DataContext, RelativeSource={RelativeSource Self}}">
+                    <MenuItem Name="recordMenu" Header="Record audio..." InputGestureText="F9" Command="local:CustomCommands.Record" />
+                    <MenuItem Name="recordMidiMenu" Header="Record midi..." InputGestureText="Ctrl+F9" Command="local:CustomCommands.RecordMidi"/>
+                    <Separator />
+                    <MenuItem Name="importFromYouTubeMenu" Header="Import from YouTube..." InputGestureText="Ctrl+Shift+F9" Command="local:CustomCommands.ImportFromYouTube" />
+                    <Separator/>
+                    <MenuItem Header="Delete" Name="deleteMenu" Command="local:CustomCommands.DeleteSample" 
+                              CommandParameter="{Binding RelativeSource={RelativeSource Self}, Path=Parent.PlacementTarget.SelectedItem}" />
+                </ContextMenu>
+            </ListView.ContextMenu>
+        </ListView>
+    </StackPanel>
 </UserControl>

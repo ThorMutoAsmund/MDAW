@@ -16,7 +16,7 @@
         <KeyBinding Key="E" Modifiers="Control" Command="local:CustomCommands.StartEditor"/>
         <KeyBinding Key="F5" Command="local:CustomCommands.PlayFromStart"/>
         <KeyBinding Key="F6" Command="local:CustomCommands.PlayPattern"/>
-        <KeyBinding Key="Space" Command="local:CustomCommands.StopPlay"/>
+        <KeyBinding Key="Esc" Command="local:CustomCommands.StopPlay"/>
         <KeyBinding Key="F1" Command="local:CustomCommands.About"/>
         <KeyBinding Key="D1" Modifiers="Alt" Command="local:CustomCommands.RecentFile1"/>
         <KeyBinding Key="F9" Command="local:CustomCommands.Record"/>

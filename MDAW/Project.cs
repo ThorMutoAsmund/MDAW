@@ -24,11 +24,11 @@ namespace MDAW
         public string DLLName { get; private set; }
         public string DLLPath { get; private set; }
         public string MainClassName { get; private set; }
-
         public Assembly? Assembly { get; private set; }
         public Song? Song { get; private set; }
 
         private FileSystemWatcher? dllWatcher;
+        private Watchers fileWatchers;
 
         private Project(string projectPath, string target, ProjectConfiguration configuration)
         {
@@ -40,6 +40,8 @@ namespace MDAW
             this.DLLName = Path.ChangeExtension(Path.GetFileName(this.ProjectPath), ".dll");
             this.MainClassName = $"{this.ProjectName}.Main";
             this.DLLPath = Path.Combine(this.RootPath, "bin", this.Configuration.ToString("g"), this.Target, this.DLLName);
+
+            this.fileWatchers = new Watchers(this);
         }
 
         public static bool TryLoadFromFile(string projectPath, out Project? project)

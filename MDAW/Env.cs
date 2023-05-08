@@ -22,6 +22,8 @@ namespace MDAW
         public static event Action? RecentFilesChanged;
         public static event Action? DLLReloaded;
 
+        public static event Action<List<string>>? SamplesListChanged;
+
         public static string ApplicationName = "MDAW";
         public static bool IsDebug => true;
         public static bool HasChanges
@@ -93,6 +95,8 @@ namespace MDAW
         }
 
         public static string ProjectName => Project != null ? Path.GetFileNameWithoutExtension(Project.ProjectPath) : string.Empty;
+        public static string ProjectRootPath => Project != null ? Project.RootPath : string.Empty;
+        public static string ProjectSongTitle => Project?.Song != null ? Project.Song.Title : ProjectName;
 
         public static string LastProjectPath = System.IO.Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location) ?? string.Empty;
 
@@ -108,6 +112,10 @@ namespace MDAW
             Env.OnAddMessage($"Reloaded '{song.Title}'");
 
             DLLReloaded?.Invoke();
+        }
+        public static void OnSamplesListChanged(List<string> samplesList)
+        {
+            SamplesListChanged?.Invoke(samplesList);
         }
     }
 }
